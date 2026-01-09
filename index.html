@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just lek enty 💖</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffd1dc;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* LOGIN */
+#login {
+  text-align: center;
+}
+
+input {
+  padding: 12px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+}
+
+button {
+  padding: 12px 25px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #ff4d6d;
+  color: white;
+  font-size: 1em;
+}
+
+/* CONTENT */
+#content {
+  display: none;
+  text-align: center;
+  width: 100%;
+}
+
+#herName {
+  font-family: 'Brush Script MT', 'Pacifico', cursive;
+  font-size: 2.6em;
+  color: #9d0208;
+  margin-bottom: 10px;
+}
+
+#message {
+  font-size: 1.6em;
+  color: #a4133c;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+/* IMAGE + HEART PULSE */
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.image-wrapper::before {
+  content: "💖 💖 💖 💖 💖";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+  50% { transform: translateX(-50%) scale(1.4); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+}
+
+#loveImage {
+  max-width: 480px;
+  width: 90%;
+  border-radius: 25px;
+  margin: 20px auto 0;
+  display: none;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* BUTTON */
+#magicBtn {
+  position: absolute;
+  background: #ff8fab;
+}
+
+/* FLOATING HEARTS */
+.heart {
+  position: absolute;
+  font-size: 22px;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* MUSIC BUTTON */
+#musicBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #ff4d6d;
+  color: white;
+  border-radius: 50%;
+  padding: 14px;
+  border: none;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>💖 Ekteb lpassword 💖</h2>
+  <input type="password" id="password">
+  <br><br>
+  <button onclick="checkPassword()">Khouch</button>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <div id="herName">Menyar 💕</div>
+  <div id="message">Enzel aal 9ars 💕</div>
+
+  <div class="image-wrapper">
+    <img id="loveImage" src="image.jpg">
+  </div>
+
+  <button id="magicBtn" onclick="nextMessage()">Enzel 💘</button>
+</div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop></audio>
+<button id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+<script>
+const correctPassword = "nikzeby";
+
+const messages = [
+  "Hadhya site aamltou just lek enty nchlh yaajbek 💖",
+  "Lahkya sahla 🌸",
+  "Aamtlk tarf puzzles bech talaahom 💕",
+  "Lmara hadhy aana lcode hadha ektbou fel google map 💌",
+  "Nhebk barcha 💘"
+];
+
+let index = 0;
+const bgMusic = document.getElementById("bgMusic");
+let firstMusicStarted = false;
+
+/* FIRST SONG – starts after first click */
+document.addEventListener("click", () => {
+  if (!firstMusicStarted) {
+    bgMusic.src = "love1.mp3";
+    bgMusic.play();
+    firstMusicStarted = true;
+  }
+});
+
+function checkPassword() {
+  const input = document.getElementById("password").value;
+  if (input === correctPassword) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("content").style.display = "block";
+
+    /* SWITCH TO SECOND SONG */
+    bgMusic.pause();
+    bgMusic.src = "love2.mp3";
+    bgMusic.play();
+
+    startHearts();
+  } else {
+    alert("Zid thabet 😢");
+  }
+}
+
+function nextMessage() {
+  const messageBox = document.getElementById("message");
+  const image = document.getElementById("loveImage");
+
+  messageBox.innerText = messages[index];
+
+  if (index === 3) {
+    image.style.display = "block";
+  } else {
+    image.style.display = "none";
+  }
+
+  moveButton();
+
+  index++;
+  if (index >= messages.length) index = 0;
+}
+
+function moveButton() {
+  const btn = document.getElementById("magicBtn");
+  const positions = [
+    {top: "15%", left: "10%"},
+    {top: "15%", left: "70%"},
+    {top: "75%", left: "10%"},
+    {top: "75%", left: "70%"}
+  ];
+  const pos = positions[Math.floor(Math.random() * positions.length)];
+  btn.style.top = pos.top;
+  btn.style.left = pos.left;
+}
+
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = Math.random() > 0.5 ? "💖" : "🌸";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
+}
+
+function toggleMusic() {
+  if (bgMusic.paused) bgMusic.play();
+  else bgMusic.pause();
+}
+</script>
+
+</body>
+</html>
